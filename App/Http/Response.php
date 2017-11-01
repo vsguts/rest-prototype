@@ -15,6 +15,8 @@ class Response
 
     public function send()
     {
-        //
+        if ($this->statusCode) {
+            // header()
+        }
     }
 }

@@ -30,7 +30,7 @@ class Request
     {
         if (is_null($this->path)) {
             $scriptDir = dirname($_SERVER['SCRIPT_NAME']);
-            $uri = $_SERVER['REQUEST_URI'];
+            list($uri) = explode('?', $_SERVER['REQUEST_URI'], 2);
             if (strpos($uri, $scriptDir) === 0) {
                 $uri = substr($uri, strlen($scriptDir));
             }

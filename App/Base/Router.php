@@ -29,6 +29,7 @@ class Router
      */
     public function add($method, $path, $controller, $action)
     {
+        $method = strtoupper($method);
         $this->routes[$method][$path] = [
             'controller' => $controller,
             'action' => $action,
@@ -47,11 +48,31 @@ class Router
      */
     public function resolve(Request $request)
     {
-        if (!empty($this->routes[$request->getMethod()])) {
-            foreach ($this->routes[$request->getMethod()] as $path => $data) {
+        $method = $request->getMethod();
+        if (!empty($this->routes[$method])) {
+            $pathParts = explode('/', $request->getPath());
+            foreach ($this->routes[$method] as $routePath => $routeData) {
+                $routeParts = explode('/', $routePath);
 
+                if (count($routeParts) != count($pathParts)) {
+                    continue;
+                }
+
+                $routeData['params'] = [];
+
+                foreach ($routeParts as $routePartIndex => $routePart) {
+                    if (preg_match('/{([a-z]+)}/Sui', $routePart, $matches)) { // Variable
+                        $paramName = $matches[1];
+                        $routeData['params'][$paramName] = $pathParts[$routePartIndex];
+                    } elseif ($routePart != $pathParts[$routePartIndex]) { // Constant
+                        continue(2); // Next route
+                    }
+                }
+
+                return $routeData;
             }
         }
+
         throw new BadRequestException('Route not found');
     }
 
