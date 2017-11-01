@@ -1,0 +1,16 @@
+# composer
+/vendor
+composer.phar
+
+# IDEs
+.idea/
+*.sublime-*
+nbproject
+.buildpath
+.project
+.settings
+
+# OS
+.DS_Store
+Thumbs.db
+
