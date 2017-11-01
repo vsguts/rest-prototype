@@ -1,10 +1,15 @@
 <?php
 
-use App\Components\Application;
-use App\Components\Request;
+
+use App\Base\Application;
+use App\Http\Request;
 
 require __DIR__ . '/../bootstrap/bootstrap.php';
 
-$application = new Application(new Request());
-$response = $application->handleRequest();
+$config = require __DIR__ . '/../config/config.php';
+$application = new Application(new Request(), $config);
+
+$router = require __DIR__ . '/../routes/routes.php';
+$response = $application->handleRequest($router);
+
 $response->send();
