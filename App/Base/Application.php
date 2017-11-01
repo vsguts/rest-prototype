@@ -4,7 +4,7 @@ namespace App\Base;
 
 use App\Controllers\ControllerInterface;
 use App\Exceptions\BadRequestException;
-use App\Exceptions\BaseException;
+use App\Exceptions\HttpException;
 use App\Http\Request;
 use App\Http\Response;
 
@@ -57,7 +57,7 @@ class Application
                 $result = new Response($result);
             }
 
-        } catch (BaseException $e) {
+        } catch (HttpException $e) {
             $result = new Response(['error' => $e->getMessage()], $e->getReponseCode());
         }
 

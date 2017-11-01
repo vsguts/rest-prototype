@@ -2,7 +2,7 @@
 
 namespace App\Exceptions;
 
-class HttpException extends BaseException
+class HttpException extends \Exception
 {
     public function getReponseCode()
     {

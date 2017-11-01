@@ -57,7 +57,7 @@ You need to set **Accept** header, to use this feature
 ### Available routes
 
 - GET /users
-- GET /users/{id}
+- GET /users/{id} - 200 or 404
 - POST /users - Exception: 400
 - PUT /users/{id} - Exception: 400
 - DELETE /users/{id} - 204

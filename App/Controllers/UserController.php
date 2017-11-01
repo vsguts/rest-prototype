@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Exceptions\NotFoundException;
 use App\Http\Response;
 use App\Models\User;
 
@@ -23,7 +24,10 @@ class UserController extends AbstractController
 
     public function viewAction($id)
     {
-        return User::findOne($id);
+        if ($model = User::findOne($id)) {
+            return $model;
+        }
+        throw new NotFoundException('Model not found');
     }
 
     public function deleteAction($id)
