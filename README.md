@@ -39,10 +39,12 @@ USING
 ### Authenticate
 
 Login: **root**
+
 Password: **root**
 
-You need to set **Authorization**
-Header must contain `'Basic ' . base64_encode($login . ':' . $password)`
+You need to set **Authorization**.
+
+Header must contain `'Basic ' . base64_encode($login . ':' . $password)`.
 
 Example: 
 ```
