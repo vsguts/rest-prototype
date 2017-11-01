@@ -42,20 +42,30 @@ class Application
      */
     final public function handleRequest(Router $router) : Response
     {
+        $serializer = null;
+
         try {
+
+            $serializer = $this->request->getResponseSerializer();
             $params = $router->resolve($this->request);
             $controller = $this->prepareController($params['controller']);
-            $action = $this->prepareAction($params['action']);
+            $action = $this->prepareAction($controller, $params['action']);
             $args = $this->prepareArgs($controller, $action, $params['params'], $this->request->getQueryParams());
+
             $result = $this->runControllerAction($controller, $action, $args);
+            if (!$result instanceof Response) {
+                $result = new Response($result);
+            }
 
         } catch (BaseException $e) {
-            $response = new Response;
-            pd($e);
-
-            return $response;
+            $result = new Response(['error' => $e->getMessage()], $e->getReponseCode());
         }
-        pd('TODO', $this->request, $router);
+
+        if ($serializer) {
+            $result->setSerializer($serializer);
+        }
+
+        return $result;
     }
 
     /**
@@ -84,9 +94,13 @@ class Application
         throw new BadRequestException('Controller not found');
     }
 
-    protected function prepareAction($action)
+    protected function prepareAction(ControllerInterface $controller, $action)
     {
-        return $action . 'Action';
+        $action = $action . 'Action';
+        if (!method_exists($controller, $action)) {
+            throw new BadRequestException('Method does not exist: ' . get_class($controller) . '::' . $action);
+        }
+        return $action;
     }
 
     /**

@@ -2,21 +2,57 @@
 
 namespace App\Http;
 
+use App\Components\Serializer\PlainText;
+use App\Components\Serializer\SerializerInterface;
+
 class Response
 {
-    public $contentType = 'application/json';
+    protected $content;
 
     protected $statusCode;
 
-    public function __construct($statusCode = 200)
+    /**
+     * @var SerializerInterface
+     */
+    private $serializer;
+
+    public function __construct($content, $statusCode = 200)
     {
+        $this->content = $content;
         $this->statusCode = $statusCode;
+    }
+
+    /**
+     * @param SerializerInterface $serializer
+     */
+    public function setSerializer(SerializerInterface $serializer)
+    {
+        $this->serializer = $serializer;
+    }
+
+    /**
+     * @return SerializerInterface
+     */
+    public function getSerializer(): SerializerInterface
+    {
+        if (!$this->serializer) {
+            $this->serializer = new PlainText; // We need any serializer to show error
+        }
+        return $this->serializer;
     }
 
     public function send()
     {
         if ($this->statusCode) {
-            // header()
+            http_response_code($this->statusCode);
         }
+
+        $serializer = $this->getSerializer();
+
+        if ($contentType = $serializer->getContentType()) {
+            header('Content-Type: ' . $contentType);
+        }
+
+        echo $serializer->encode($this->content);
     }
 }

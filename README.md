@@ -32,3 +32,33 @@ php -S localhost:8000
 ```
 
 And open the following URL: [http://localhost:8000](http://localhost:8000)
+
+USING
+-----
+
+### Authenticate
+
+You need to set **Authorization**
+
+Header must contain `'Basic ' . base64_encode($login . ':' . $password)`
+
+Example: 
+```
+Authorization: Basic NjIzMzgxZWEwNTI1NmNlNWJhZWVhNGQ2ZjQxNzA0OWY6
+```
+
+### Available formats
+
+- `application/json`
+- `text/plain`
+
+You need to set **Accept** header, to use this feature
+
+### Available routes
+
+- GET /users
+- GET /users/{id}
+- POST /users - Exception: 400
+- PUT /users/{id} - Exception: 400
+- DELETE /users/{id} - 204
+

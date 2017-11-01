@@ -2,6 +2,11 @@
 
 namespace App\Http;
 
+use App\Components\Serializer\Json;
+use App\Components\Serializer\PlainText;
+use App\Components\Serializer\SerializerInterface;
+use App\Exceptions\BadRequestException;
+
 class Request
 {
     private $path;
@@ -76,6 +81,22 @@ class Request
             $this->rawBody = file_get_contents('php://input');
         }
         return $this->rawBody;
+    }
+
+    public function getResponseSerializer() : SerializerInterface
+    {
+        $headers = $this->getHeaders();
+        if (!empty($headers['Accept'])) {
+            $accept = explode(';', $headers['Accept']);
+            if (array_intersect($accept, ['application/json', '*/*'])) {
+                return new Json;
+            } elseif (array_intersect($accept, ['text/plain'])) {
+                return new PlainText;
+            } else {
+                throw new BadRequestException('Accept not supported yet: ' . $headers['Accept']);
+            }
+        }
+        return new Json;
     }
 
 }
