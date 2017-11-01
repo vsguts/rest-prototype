@@ -38,13 +38,15 @@ USING
 
 ### Authenticate
 
-You need to set **Authorization**
+Login: **root**
+Password: **root**
 
+You need to set **Authorization**
 Header must contain `'Basic ' . base64_encode($login . ':' . $password)`
 
 Example: 
 ```
-Authorization: Basic NjIzMzgxZWEwNTI1NmNlNWJhZWVhNGQ2ZjQxNzA0OWY6
+Authorization: Basic cm9vdDpyb290
 ```
 
 ### Available formats

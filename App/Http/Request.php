@@ -83,11 +83,26 @@ class Request
         return $this->rawBody;
     }
 
+    public function getAuth()
+    {
+        if (isset($_SERVER['PHP_AUTH_USER']) || isset($_SERVER['PHP_AUTH_PW'])) {
+            return [
+                'login' => $_SERVER['PHP_AUTH_USER'] ?? '',
+                'password' => $_SERVER['PHP_AUTH_PW'] ?? ''
+            ];
+        }
+    }
+
     public function getResponseSerializer() : SerializerInterface
     {
         $headers = $this->getHeaders();
         if (!empty($headers['Accept'])) {
-            $accept = explode(';', $headers['Accept']);
+
+            $accept = explode(',', $headers['Accept']);
+            foreach ($accept as &$aceptItem) {
+                list($aceptItem) = explode(';', $aceptItem);
+            }
+
             if (array_intersect($accept, ['application/json', '*/*'])) {
                 return new Json;
             } elseif (array_intersect($accept, ['text/plain'])) {

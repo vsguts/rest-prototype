@@ -2,12 +2,20 @@
 
 namespace App\Controllers;
 
+use App\Controllers\Traits\AuthTrait;
 use App\Exceptions\NotFoundException;
 use App\Http\Response;
 use App\Models\User;
 
 class UserController extends AbstractController
 {
+    use AuthTrait;
+
+    public function beforeAction()
+    {
+        $this->checkAuth();
+    }
+
     public function indexAction($return_params = false)
     {
         $data = User::findMany();
