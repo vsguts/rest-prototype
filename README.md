@@ -14,6 +14,11 @@ Console:
 git clone git@github.com:vsguts/rest-prototype.git
 ```
 
+REQUIREMENTS
+------------
+
+- PHP 7 or higher
+
 RUNING
 ------
 
